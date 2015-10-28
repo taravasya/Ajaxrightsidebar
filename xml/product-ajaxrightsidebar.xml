@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<product productid="ajaxrightsidebar" active="1">
+	<title>Ajax rightsidebar</title>
+	<description />
+	<version>0.0.1</version>
+	<url />
+	<versioncheckurl />
+	<dependencies>
+	</dependencies>
+	<codes>
+	</codes>
+	<templates>
+		<template name="rightside_lastvisited" templatetype="template" date="1446067969" username="taravasya" version="0.0.1"><![CDATA[<div>{vb:raw lastvisitedinfo}</div>]]></template>
+		<template name="rightside_posts" templatetype="template" date="1446067922" username="taravasya" version="0.0.1"><![CDATA[{vb:raw lastpostsinfo}]]></template>
+	</templates>
+	<stylevardfns>
+	</stylevardfns>
+	<stylevars>
+	</stylevars>
+	<plugins>
+		<plugin active="1" executionorder="5">
+			<title><![CDATA[Ajaxrightsidebar: [cache]]]></title>
+			<hookname>cache_templates</hookname>
+			<phpcode><![CDATA[if(file_exists(DIR . '/ajaxrightsidebar/hooks/cache_templates.php')) 
+{ 
+      require_once(DIR . '/ajaxrightsidebar/hooks/cache_templates.php'); 
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title><![CDATA[Ajaxrightsidebar: [update_cookie]]]></title>
+			<hookname>showthread_complete</hookname>
+			<phpcode><![CDATA[if(file_exists(DIR . '/ajaxrightsidebar/hooks/update_cookie.php')) 
+{ 
+      require_once(DIR . '/ajaxrightsidebar/hooks/update_cookie.php'); 
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title><![CDATA[Ajaxrightsidebar: [functions]]]></title>
+			<hookname>showthread_start</hookname>
+			<phpcode><![CDATA[if(file_exists(DIR . '/ajaxrightsidebar/includes/last_posts.php'))
+{
+      require_once(DIR . '/ajaxrightsidebar/includes/last_posts.php');
+}
+
+if(file_exists(DIR . '/ajaxrightsidebar/includes/last_visited.php'))
+{
+      require_once(DIR . '/ajaxrightsidebar/includes/last_visited.php');
+}]]></phpcode>
+		</plugin>
+	</plugins>
+	<phrases>
+	</phrases>
+	<options>
+	</options>
+	<helptopics>
+	</helptopics>
+	<cronentries>
+	</cronentries>
+	<faqentries>
+	</faqentries>
+	<navigation>
+	</navigation>
+</product>

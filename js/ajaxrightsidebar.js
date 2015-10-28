@@ -48,13 +48,13 @@ function ajaxupdate() {
 			$(document).ready(function()
 			{
 				if (infoNotloaded) {
-					$rightsidelastvisited.load('ajaxrightsidebar/hooks/last_visited.php?&getlastvisited=1');
-					$rightsideposts.load('ajaxrightsidebar/hooks/last_posts.php?&getlastposts=1', function() {
+					$rightsidelastvisited.load('ajaxrightsidebar/includes/last_visited.php?&getlastvisited=1');
+					$rightsideposts.load('ajaxrightsidebar/includes/last_posts.php?&getlastposts=1', function() {
 						$("#rightside_container").animate({opacity: '1'}, 300);
 						infoNotloaded = false;
 					});
 				} else {
-					$rightsideposts.load('ajaxrightsidebar/hooks/last_posts.php?&getlastposts=1', function() {
+					$rightsideposts.load('ajaxrightsidebar/includes/last_posts.php?&getlastposts=1', function() {
 						$("#rightside_container").animate({opacity: '1'}, 150);
 					});
 				}
@@ -93,7 +93,7 @@ function writeContent() {
 	refreshId = setInterval(function()
 	{
 		$oldrightsidepostsdiv = $rightsideposts.html();
-		$rightsideposts.load('ajaxrightsidebar/hooks/last_posts.php?&getlastposts=1', function() {
+		$rightsideposts.load('ajaxrightsidebar/includes/last_posts.php?&getlastposts=1', function() {
 			$newrightsidepostsdiv = $rightsideposts.html();
 			if ($newrightsidepostsdiv != $oldrightsidepostsdiv) {
 				$rightsideposts.addClass('rightside_highlight');
