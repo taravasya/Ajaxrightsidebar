@@ -1,0 +1,71 @@
+/********** AJAX RIGHTSIDEBAR START*******************/
+h3#quickreply_title {
+    clear: both;
+}
+
+.leftside {
+    float: left;
+    width: 99%;
+    transition: 0.2s;
+}
+
+.rightsideinfobit {
+    padding: 3px 10px;
+    padding-right: 20px;
+    margin-bottom: 7px;
+}
+
+.rightside {
+    transition: 0.2s;
+    font-family: 'Ad-Clean', sans-serif;
+    font-size: 13px;
+    float: right;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    width: 0%;
+    overflow: hidden;
+}
+
+.rightside_title {
+    padding: 20px 0 5px 0;
+    color: #2D2D2D;
+}
+
+.rightsideico {
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+.rightside_collaps {
+    position: absolute;
+    right: 0px;
+    margin-top: 5px;
+    clip: rect(auto, 15px, auto, auto);
+    cursor: pointer;
+}
+
+div#rightside_container {
+    display: none;
+    overflow: auto;
+    width: 105%;
+    margin-top: -15px;
+}
+
+.rightside_highlight {
+	background-color: #EEEE90;
+	transition: background 200ms;
+}
+
+div#rightsideposts {
+	transition: background 3000ms;
+	margin-left: 10px;
+	margin-bottom: -15px;
+	border-left: 1px solid #D9D9D9;
+}
+
+div#rightsidelastvisited {
+	margin-left: 10px;
+	margin-bottom: -15px;
+	border-left: 1px solid #D9D9D9;
+}
+/********** AJAX RIGHTSIDEBAR END*******************/
