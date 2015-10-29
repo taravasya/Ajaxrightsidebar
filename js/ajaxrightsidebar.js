@@ -21,7 +21,7 @@ var $rightsideposts = $("#rightsideposts");
 var $rightsidelastvisited = $("#rightsidelastvisited");	
 
 if (document.getElementById('leftside')) {
-	var $myheight = document.getElementById ('leftside').offsetHeight - 46;
+	var $myheight = document.getElementById ('leftside').offsetHeight - 56;
 	document.getElementById('rightside_container').style.maxHeight = $myheight + 'px';
 }
 
