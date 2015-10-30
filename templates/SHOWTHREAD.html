@@ -53,11 +53,18 @@
 
 {vb:raw template_hook.showthread_above_posts}
 {vb:raw poll}
-
+<vb:if condition="$show['member']">
+<!-- BOTHSIDEBLOCK-->
+<!--LEFTSIDEBLOCK-->
+<div class="leftside" id="leftside">
+</vb:if>
 	<div id="pagetitle" class="pagetitle">
 		<h1><vb:comment>{vb:rawphrase thread}:</vb:comment><span class="threadtitle"><a href="{vb:raw thread_url}" title="{vb:rawphrase reload_this_page}">{vb:raw threadinfo.title}</a></span></h1>
 		<p id="postpagestats_above" class="postpagestats">{vb:rawphrase showing_results_x_to_y_of_z, {vb:raw pagenumbers.first}, {vb:raw pagenumbers.last}, {vb:raw totalposts}}</p>
         </div>
+<!--<script type="text/javascript" src="clientscript/lazyloadxt/jquery/jquery.js"></script>
+<link rel="stylesheet" href="clientscript/lazyloadxt/jquery.lazyloadxt.fadein.css">
+<script type="text/javascript" src="clientscript/lazyloadxt/jquery.lazyloadxt.extra.js"></script>-->
 	<!-- ///////////////////////// Соц-сети ////////////////////////////// -->
 <!--<div><span style="padding-left: 2px;">Расскажите об этой теме:<br></span></div>
 <div style="padding-top: 2px;" class="share42init"></div>
@@ -70,7 +77,7 @@
 			<img style="display:none;" id="progress_newreplylink_top" src="images/electron_style/loader.gif" alt="" />
 		</vb:if>
 		<!-- Photik +верхняя навигация -->
-		<div id="pagination_top" class="pagination_top" style="padding-right: 5px">
+		<div id="pagination_top" class="pagination_top" style="padding-right: 10px">
 		<vb:if condition="$pagenav">
 			{vb:raw pagenav}
 		</vb:if>
@@ -85,6 +92,7 @@
 				<h6><a class="popupctrl" href="javascript://">{vb:rawphrase thread_tools}</a></h6>
 				<ul class="popupbody popuphover">
 					<li><a href="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}printthread.php?{vb:raw session.sessionurl}t={vb:raw threadid}<vb:if condition="$perpage">&amp;pp={vb:raw perpage}</vb:if><vb:if condition="$pagenumber">&amp;page={vb:raw pagenumber}</vb:if>" accesskey="3" rel="nofollow">{vb:rawphrase show_printable_version}</a></li>
+					<!--<li><a href="printthread.php?{vb:raw session.sessionurl}t={vb:raw threadid}&amp;all">{vb:rawphrase adv_printthread_showallpages}</a></li>-->
 					<vb:if condition="$show['sendtofriend']">
 						<li><a href="sendmessage.php?{vb:raw session.sessionurl}do=sendtofriend&amp;t={vb:raw threadid}" rel="nofollow">{vb:rawphrase email_this_page}&hellip;</a></li>
 					</vb:if>
@@ -305,7 +313,25 @@
 		{vb:raw forumjump}
 	</div>
 </div>
-
+{vb:raw ad_location.ad_showthread_beforeqr}
+<vb:if condition="$show['member']">
+</div>
+<!--LEFTSIDEBLOCK-->
+<!-- RIGHTSIDEBLOCK-->
+<div class="rightside" id="rightside">
+<div id="rightside_collaps" class="rightside_collaps"><img id="onclick" src="ajaxrightsidebar/imgs/rightside_collaps.png" alt="Показать / скрыть панель"></div>
+<div id="rightside_container">
+<p class="rightside_title"><img align="left" class="rightsideico" src="ajaxrightsidebar/imgs/rightside_activestream.png"><big>Лента активности</big><br><small>Новые сообщения в темах</small></p>
+<div id="rightsideposts">{vb:raw rightside_lastposts}</div>
+<p class="rightside_title"><img align="left" class="rightsideico" src="ajaxrightsidebar/imgs/rightside_history.png"><big>История</big><br><small>Просмотренные темы</small></p>
+<div id="rightsidelastvisited">{vb:raw rightside_lastvisited}</div>
+<p class="rightside_title"><img align="left" class="rightsideico" src="ajaxrightsidebar/imgs/rightside_similar.png"><big>Похожие темы</big><br><small>Возможно то, что Вы искали?</small></p>
+<div id="rightsideposts">{vb:raw similarthreads}{vb:raw rightside_similarthreads}</div>
+</div>
+</div>
+<!--RIGHTSIDEBLOCK-->
+<!--BOTHSIDEBLOCK-->
+</vb:if>
 <vb:if condition="$show['multiquote_global']">
 <!-- multiquote scripts -->
 <script type="text/javascript">
@@ -459,7 +485,6 @@ var mqlimit = {vb:raw vboptions.mqlimit};
 		</ol>
 	</div>
 	</vb:if>
-	{vb:raw similarthreads}
 	{vb:raw template_hook.showthread_after_activeusers}
 
 	<vb:if condition="$show['wrt']">
@@ -567,8 +592,10 @@ var mqlimit = {vb:raw vboptions.mqlimit};
 	</script>
 <!-- / lightbox scripts -->
 </vb:if>
+
 {vb:raw template_hook.showthread_below_posts}
 
 {vb:raw footer}
+<script type="text/javascript" src="ajaxrightsidebar/js/ajaxrightsidebar.js"></script>
 </body>
 </html>
