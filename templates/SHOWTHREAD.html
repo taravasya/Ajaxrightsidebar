@@ -1,0 +1,574 @@
+{vb:stylevar htmldoctype}
+<html xmlns="http://www.w3.org/1999/xhtml"<vb:if condition="$vboptions['enablefacebookconnect']"> xmlns:fb="http://www.facebook.com/2008/fbml"</vb:if> dir="{vb:stylevar textdirection}" lang="{vb:stylevar languagecode}" id="vbulletin_html">
+<head>
+	{vb:raw headinclude}
+	<vb:if condition="$threadinfo['keywords']"><meta name="keywords" content="{vb:raw threadinfo.keywords}" /></vb:if>
+	<meta name="description" content="{vb:raw thread.meta_description}" />
+
+	<title>{vb:raw thread.prefix_plain_html} {vb:raw thread.title}<vb:if condition="$pagenumber > '1'"> - {vb:rawphrase page_x, {vb:raw pagenumber}}</vb:if></title>
+	<link rel="canonical" href="{vb:raw thread_url}" />
+	<vb:if condition="$show['reputation']">
+	<script type="text/javascript" src="clientscript/vbulletin-ajax-reputation.js?v={vb:raw vboptions.simpleversion}"></script>
+	</vb:if>
+	<vb:if condition="$show['quickedit'] OR $show['quickreply']">
+		<script type="text/javascript" src="clientscript/vbulletin_textedit.js?v={vb:raw vboptions.simpleversion}"></script>
+	</vb:if>
+	<vb:if condition="$show['postloader_js']">
+		<script type="text/javascript" src="clientscript/vbulletin_post_loader.js?v={vb:raw vboptions.simpleversion}"></script>
+	</vb:if>
+	<vb:if condition="$show['threadrating']">
+	<script type="text/javascript" src="clientscript/vbulletin_ajax_threadrate.js?v={vb:raw vboptions.simpleversion}"></script>
+	</vb:if>
+	<vb:if condition="$show['multiquote_global']">
+	<script type="text/javascript" src="clientscript/vbulletin_multi_quote.js?v={vb:raw vboptions.simpleversion}"></script>
+	</vb:if>
+	<vb:if condition="$show['quickedit']">
+	<script type="text/javascript" src="clientscript/vbulletin-editor.js?v={vb:raw vboptions.simpleversion}"></script>
+	<script type="text/javascript" src="clientscript/vbulletin_quick_edit.js?v={vb:raw vboptions.simpleversion}"></script>
+	</vb:if>
+	<vb:if condition="$show['quickreply']">
+	<script type="text/javascript" src="clientscript/vbulletin_quick_reply.js?v={vb:raw vboptions.simpleversion}"></script>
+	</vb:if>
+	<vb:if condition="$show['manage_tag']">
+	<script type="text/javascript" src="clientscript/vbulletin_ajax_taglist.js?v={vb:raw vboptions.simpleversion}"></script>
+	<script type="text/javascript" src="clientscript/vbulletin_ajax_suggest.js?v={vb:raw vboptions.simpleversion}"></script>
+	</vb:if>
+	<vb:if condition="$show['lightbox']">
+		<script type="text/javascript" src="clientscript/vbulletin_lightbox.js?v={vb:raw vboptions.simpleversion}"></script>
+	</vb:if>
+
+	<vb:if condition="$vboptions['storecssasfile']">
+		{vb:cssfile showthread-rollup.css}
+	<vb:else />
+		{vb:cssfile toolsmenu.css,postlist.css,showthread.css,postbit.css,options.css,poll.css,lightbox.css}
+	</vb:if>
+	<!--[if lt IE 8]>{vb:cssfile toolsmenu-ie.css,postlist-ie.css,showthread-ie.css,postbit-ie.css,poll-ie.css}<![endif]-->
+{vb:raw headinclude_bottom}
+</head>
+
+<body<vb:if condition="$onload"> onload="{vb:raw onload}"</vb:if>>
+
+{vb:raw header}
+{vb:raw navbar}
+
+{vb:raw template_hook.showthread_above_posts}
+{vb:raw poll}
+
+	<div id="pagetitle" class="pagetitle">
+		<h1><vb:comment>{vb:rawphrase thread}:</vb:comment><span class="threadtitle"><a href="{vb:raw thread_url}" title="{vb:rawphrase reload_this_page}">{vb:raw threadinfo.title}</a></span></h1>
+		<p id="postpagestats_above" class="postpagestats">{vb:rawphrase showing_results_x_to_y_of_z, {vb:raw pagenumbers.first}, {vb:raw pagenumbers.last}, {vb:raw totalposts}}</p>
+        </div>
+	<!-- ///////////////////////// Соц-сети ////////////////////////////// -->
+<!--<div><span style="padding-left: 2px;">Расскажите об этой теме:<br></span></div>
+<div style="padding-top: 2px;" class="share42init"></div>
+<script type="text/javascript" src="http://wedframe.ru/clientscript/share42/share42.js"></script>-->
+	<!-- ///////////////////////// Соц-сети ////////////////////////////// -->
+	<div id="thread_controls" class="thread_controls toolsmenu floatcontainer">
+
+		<vb:if condition="$show['largereplybutton']">
+			<a href="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}newreply.php?{vb:raw session.sessionurl}p={vb:raw LASTPOSTID}&amp;noquote=1" class="newcontent" id="newreplylink_top"><vb:if condition="$show['closethread']">{vb:rawphrase reply_to_thread}<vb:else />{vb:rawphrase closed_thread}</vb:if></a>
+			<img style="display:none;" id="progress_newreplylink_top" src="images/electron_style/loader.gif" alt="" />
+		</vb:if>
+		<!-- Photik +верхняя навигация -->
+		<div id="pagination_top" class="pagination_top" style="padding-right: 5px">
+		<vb:if condition="$pagenav">
+			{vb:raw pagenav}
+		</vb:if>
+		</div>
+		<!-- Photik +верхняя навигация -->
+		<ul id="postlist_popups" class="postlist_popups popupgroup">
+			<vb:if condition="$show['firstunreadlink'] AND $thread['replycount']">
+			<li class="popupmenu"><h6><a class="firstunread" href="{vb:raw firstunread}">{vb:rawphrase view_first_unread}</a></h6></li>
+			</vb:if>
+			{vb:raw template_hook.threadtoolbar}
+			<li class="popupmenu" id="threadtools">
+				<h6><a class="popupctrl" href="javascript://">{vb:rawphrase thread_tools}</a></h6>
+				<ul class="popupbody popuphover">
+					<li><a href="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}printthread.php?{vb:raw session.sessionurl}t={vb:raw threadid}<vb:if condition="$perpage">&amp;pp={vb:raw perpage}</vb:if><vb:if condition="$pagenumber">&amp;page={vb:raw pagenumber}</vb:if>" accesskey="3" rel="nofollow">{vb:rawphrase show_printable_version}</a></li>
+					<vb:if condition="$show['sendtofriend']">
+						<li><a href="sendmessage.php?{vb:raw session.sessionurl}do=sendtofriend&amp;t={vb:raw threadid}" rel="nofollow">{vb:rawphrase email_this_page}&hellip;</a></li>
+					</vb:if>
+					<li>
+						<vb:if condition="$show['subscribed']">
+							<a href="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}subscription.php?{vb:raw session.sessionurl}do=removesubscription&amp;t={vb:raw threadid}" rel="nofollow">{vb:rawphrase unsubscribe_from_this_thread}</a>
+						<vb:else />
+							<a href="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}subscription.php?{vb:raw session.sessionurl}do=addsubscription&amp;t={vb:raw threadid}" rel="nofollow">{vb:rawphrase subscribe_to_this_thread}&hellip;</a>
+						</vb:if>
+					</li>
+					<vb:if condition="$show['addpoll']">
+						<li><a href="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}poll.php?{vb:raw session.sessionurl}do=newpoll&amp;t={vb:raw threadid}">{vb:rawphrase add_a_poll_to_this_thread}&hellip;</a></li>
+					</vb:if>
+				</ul>
+			</li>
+
+			<vb:if condition="$show['adminoptions']">
+				<li class="popupmenu" id="moderationtools">
+					<h6><a class="popupctrl" href="javascript://">{vb:rawphrase administrative}</a></h6>
+					<form action="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}postings.php" method="post">
+						<ul class="popupbody popuphover">
+							<vb:if condition="$show['openclose']">
+								<li><label>
+									<input type="radio" name="do" value="openclosethread" checked="checked" tabindex="1" />
+									<vb:if condition="$show['closethread']">{vb:rawphrase close_thread}<vb:else />{vb:rawphrase open_thread}</vb:if>
+								</label></li>
+							</vb:if>
+							<vb:if condition="$show['moderatethread']">
+								<li><label>
+									<input type="radio" name="do" value="moderatethread" tabindex="2" /> 
+									<vb:if condition="$show['approvethread']">{vb:rawphrase approve_thread}<vb:else />{vb:rawphrase unapprove_thread}</vb:if>
+								</label></li>
+							</vb:if>
+							<vb:if condition="$show['movethread']">
+								<li><label><input type="radio" name="do" value="movethread" tabindex="3" /> {vb:rawphrase move_thread}&hellip;</label></li>
+								<li><label><input type="radio" name="do" value="copythread" tabindex="4" /> {vb:rawphrase copy_thread}&hellip;</label></li>					
+							</vb:if>
+							<vb:if condition="$show['editthread']">
+								<li><label><input type="radio" name="do" value="editthread" tabindex="5" /> {vb:rawphrase edit_thread}&hellip;</label></li>
+							</vb:if>
+							<vb:if condition="$show['deletethread']">
+							<li><label><input type="radio" name="do" value="deletethread" tabindex="6" /> {vb:rawphrase delete_thread}&hellip;</label></li>
+							</vb:if>
+							<vb:if condition="$show['managethread']">
+								<li><label>
+									<input type="radio" name="do" value="stick" tabindex="7" />
+									<vb:if condition="$show['unstick']">{vb:rawphrase unstick_thread}<vb:else />{vb:rawphrase stick_thread}</vb:if>
+								</label></li>
+                                                                <vb:if condition="$vboptions['gmab_firstpost_onoff']">
+<li><label><input type="radio" name="do" value="setfirstpost" tabindex="8" /> <vb:if condition="$thread['firstpoststicked']=='1'">{vb:rawphrase unstick_post}<vb:else />{vb:rawphrase stick_post}</vb:if></label></li>
+</vb:if>
+								<li><label><input type="radio" name="do" value="mergethread" tabindex="8" /> {vb:rawphrase merge_threads}&hellip;</label></li>
+								<li><label><input type="radio" name="do" value="removeredirect" tabindex="9" /> {vb:rawphrase remove_redirects}</label></li>
+							</vb:if>
+							{vb:raw template_hook.showthread_adminoptions}
+							<li class="formsubmit">
+								<input type="submit" class="button" value="{vb:rawphrase proceed_ellipsis}" tabindex="10" /> 
+								<input class="button" type="reset" value="{vb:rawphrase reset}" tabindex="11" />
+							</li>
+						</ul>
+						<input type="hidden" name="s" value="{vb:raw session.sessionhash}" />
+						<input type="hidden" name="securitytoken" value="{vb:raw bbuserinfo.securitytoken}" />
+						<input type="hidden" name="t" value="{vb:raw threadid}" />
+						<input type="hidden" name="pollid" value="{vb:raw pollid}" />
+					</form>
+				</li>
+			</vb:if>
+
+			<vb:if condition="$show['search']">
+				<li class="popupmenu searchthread menusearch" id="searchthread">
+					<h6><a class="popupctrl" href="javascript://">{vb:rawphrase search_thread}</a></h6>
+					<form action="search.php" method="post">
+						<ul class="popupbody popuphover">
+							<li>
+								<input type="text" name="query" class="searchbox" value="{vb:rawphrase search_dots}" tabindex="13" />
+								<div>
+								<input type="submit" class="button" value="{vb:rawphrase search}" tabindex="14" />
+								<a href="search.php?{vb:raw session.sessionurl}search_type=1&amp;searchthreadid={vb:raw thread.threadid}&amp;contenttype=vBForum_Post" class="advancedsearchlink">{vb:rawphrase advanced_search}</a>
+								</div>
+							</li>
+						</ul>
+						<input type="hidden" name="s" value="{vb:raw session.sessionhash}" />
+						<input type="hidden" name="securitytoken" value="{vb:raw bbuserinfo.securitytoken}" />
+						<input type="hidden" name="do" value="process" />
+						<input type="hidden" name="searchthreadid" value="{vb:raw thread.threadid}" />
+						<input type="hidden" name="search_type" value="1" />
+						<input type="hidden" name="contenttype" value="vBForum_Post" />
+					</form>
+				</li>
+			</vb:if>
+
+			<vb:if condition="$show['threadrating']">
+				<li class="popupmenu" id="threadrating">
+					<h6><a class="popupctrl" href="javascript://">{vb:rawphrase rate_this_thread}</a></h6>
+					<div class="popupbody popuphover">
+						<form action="threadrate.php" method="post" id='showthread_threadrate_form'>
+							<ul>
+								<li id="threadrating_current"<vb:if condition="!$show['rating']"> class="hidden"</vb:if> title="{vb:rawphrase thread_rating_x_votes_y_average, {vb:raw thread.votenum}, {vb:raw thread.voteavg}}"><label><span class="rating r{vb:raw thread.rating}"><span></span></span>{vb:rawphrase current_rating}</label></li>
+							<vb:if condition="$show['ratethread']">
+								<li><label for="r5"><span class="rating r5"><span></span></span><input type="radio" name="vote" value="5" id="r5" {vb:raw votechecked.5} tabindex="20" /> {vb:rawphrase excellent}</label></li>
+								<li><label for="r4"><span class="rating r4"><span></span></span><input type="radio" name="vote" value="4" id="r4" {vb:raw votechecked.4} tabindex="21" /> {vb:rawphrase good}</label></li>
+								<li><label for="r3"><span class="rating r3"><span></span></span><input type="radio" name="vote" value="3" id="r3" {vb:raw votechecked.3} tabindex="22" /> {vb:rawphrase average}</label></li>
+								<li><label for="r2"><span class="rating r2"><span></span></span><input type="radio" name="vote" value="2" id="r2" {vb:raw votechecked.2} tabindex="23" /> {vb:rawphrase bad}</label></li>
+								<li><label for="r1"><span class="rating r1"><span></span></span><input type="radio" name="vote" value="1" id="r1" {vb:raw votechecked.1} tabindex="24" /> {vb:rawphrase terrible}</label></li>
+								<li class="formsubmit"><input type="submit" class="button" value="{vb:rawphrase vote_now}" tabindex="25" /></li>
+							<vb:else />
+								<li><label>{vb:rawphrase already_rated_this_thread}</label></li>
+							</vb:if>
+							</ul>
+							<input type="hidden" name="s" value="{vb:raw session.sessionhash}" />
+							<input type="hidden" name="securitytoken" value="{vb:raw bbuserinfo.securitytoken}" />
+							<input type="hidden" name="t" value="{vb:raw threadid}" />
+							<input type="hidden" name="pp" value="{vb:raw perpage}" />
+							<input type="hidden" name="page" value="{vb:raw pagenumber}" />
+						</form>
+					</div>
+					<script type="text/javascript">
+					<!--
+						vB_AJAX_ThreadRate_Init('showthread_threadrate_form', {vb:raw threadinfo.threadid});
+					//-->
+					</script>
+				</li>
+			</vb:if>
+
+			<vb:if condition="$vboptions['allowthreadedmode']">
+				<li class="popupmenu" id="displaymodes">
+					<h6><a class="popupctrl" href="javascript://">{vb:rawphrase display}</a></h6>
+					<ul class="popupbody popuphover">
+						<li><vb:if condition="!$show['linearmode']"><a href="{vb:link thread, {vb:raw threadinfo}, {vb:raw pageinfo_linear}}#post{vb:raw FIRSTPOSTID}"> {vb:rawphrase switch_to_linear_mode}</a><vb:else /><label>{vb:rawphrase linear_mode}</label></vb:if></li>
+						<li><vb:if condition="!$show['hybridmode']"><a href="{vb:link thread, {vb:raw threadinfo}, {vb:raw pageinfo_hybrid}}"> {vb:rawphrase switch_to_hybrid_mode}</a><vb:else /><label>{vb:rawphrase hybrid_mode}</label></vb:if></li>
+						<li><vb:if condition="!$show['threadedmode']"><a href="{vb:link thread, {vb:raw threadinfo}, {vb:raw pageinfo_threaded}}#post{vb:raw FIRSTPOSTID}"> {vb:rawphrase switch_to_threaded_mode}</a><vb:else /><label>{vb:rawphrase threaded_mode}</label></vb:if></li>
+					</ul>
+				</li>
+			</vb:if>
+
+			<vb:if condition="$show['inlinemod']">
+				<li class="popupmenu" id="post_imodsel">
+					<h6><a class="popupctrl" href="javascript://">{vb:rawphrase inline_mod}</a></h6>
+					<ul class="popupbody popuphover">
+						<li><a href="javascript://" id="post_imodsel:all">{vb:rawphrase select_all}</a></li>
+						<li><a href="javascript://" id="post_imodsel:none">{vb:rawphrase deselect_all}</a></li>
+						<li><a href="javascript://" id="post_imodsel:invert">{vb:rawphrase invert_selection}</a></li>
+						<li><a href="javascript://" id="post_imodsel:flag:1">{vb:rawphrase select_unapproved_posts}</a></li>
+						<li><a href="javascript://" id="post_imodsel:flag:2">{vb:rawphrase select_deleted_posts}</a></li>
+						<li><a href="javascript://" id="post_imodsel:flag:4">{vb:rawphrase select_posts_with_attachments}</a></li>
+						<li><a href="javascript://" id="post_imodsel:flag:8">{vb:rawphrase select_posts_from_guests}</a></li>
+					</ul>
+				</li>
+			</vb:if>
+			</ul>
+	</div>
+
+<div id="postlist" class="postlist restrain">
+	<vb:if condition="$show['threadedmode'] OR $show['hybridmode']">
+		{vb:raw threadlist}
+	</vb:if>
+
+	<vb:if condition="$show['inlinemod']">
+	<form action="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}inlinemod.php?threadid={vb:raw threadinfo.threadid}&amp;p={vb:raw postid}" method="post" id="inlinemodform" name="inlinemodform">
+	</vb:if>
+		<ol id="posts" class="posts" start="1">
+			{vb:raw postbits}
+		</ol>
+		<div class="separator"></div>
+		<div class="postlistfoot floatcontainer">
+			<vb:if condition="$show['fb_likebutton']">{vb:raw fblikebutton}</vb:if>
+			<vb:if condition="$show['inlinemod']">
+			<div id="inlinemod_formctrls" class="popupmenu">
+				<a href="javascript://" class="popupctrl"><span class="ctrlcontainer">{vb:rawphrase moderation_tools} (<span id="post_inlinemod_count">0</span>)</span></a> 
+				<ul class="popupbody popuphover">
+					<vb:if condition="$show['managethread']">
+					<li><label><input type="radio" name="do" value="mergeposts" tabindex="31" /> {vb:rawphrase merge_posts}&hellip;</label></li>
+					<li><label><input type="radio" name="do" value="moveposts" tabindex="32" /> {vb:rawphrase move_posts}&hellip;</label></li>
+					<li><label><input type="radio" name="do" value="copyposts" tabindex="33" /> {vb:rawphrase copy_posts}&hellip;</label></li>
+					</vb:if>
+					<vb:if condition="$show['spamctrls']">
+					<li><label><input type="radio" name="do" value="spampost" tabindex="34" /> {vb:rawphrase delete_posts_as_spam}&hellip;</label></li>
+					</vb:if>
+					<vb:if condition="$show['managepost']">
+					<li><label><input type="radio" name="do" value="deleteposts" tabindex="35" /> {vb:rawphrase delete_posts}&hellip;</label></li>
+					<li><label><input type="radio" name="do" value="undeleteposts" tabindex="36" /> {vb:rawphrase undelete_posts}</label></li>
+					</vb:if>
+					<vb:if condition="$show['approvepost']">
+					<li><label><input type="radio" name="do" value="approveposts" tabindex="37" /> {vb:rawphrase approve_posts}</label></li>
+					<li><label><input type="radio" name="do" value="unapproveposts" tabindex="38" /> {vb:rawphrase unapprove_posts}</label></li>
+					</vb:if>
+					<vb:if condition="$show['approveattachment']">
+					<li><label><input type="radio" name="do" value="approveattachments" tabindex="39" /> {vb:rawphrase approve_attachments}</label></li>
+					<li><label><input type="radio" name="do" value="unapproveattachments" tabindex="40" /> {vb:rawphrase unapprove_attachments}</label></li>
+					</vb:if>
+					<li><label><input type="radio" name="do" value="viewpost" tabindex="41" /> {vb:raw vbphrase.view_selected_posts}</label></li>
+					<li><label><input type="radio" name="do" value="clearpost" tabindex="42" /> {vb:raw vbphrase.clear_post_list}</label></li>
+					{vb:raw template_hook.inlinemod_post_bottom}
+					<li class="formsubmit">
+						<input type="submit" class="button" value="{vb:rawphrase proceed_ellipsis}" tabindex="43" /> 
+					</li>
+				</ul>
+			</div>
+			</vb:if>
+		</div>
+
+	<vb:if condition="$show['inlinemod']">
+		<input type="hidden" name="s" value="{vb:raw session.sessionhash}" />
+		<input type="hidden" name="securitytoken" value="{vb:raw bbuserinfo.securitytoken}" />
+		<input type="hidden" name="threadid" value="{vb:raw threadinfo.threadid}" />
+		<input type="hidden" name="p" value="{vb:raw postid}" />
+		<input type="hidden" name="url" value="{vb:raw url}" />
+	</form>
+	</vb:if>
+
+</div>
+
+<div id="below_postlist" class="<vb:if condition="!$show['inlinemod']">noinlinemod </vb:if>below_postlist">
+	<div id="pagination_bottom" class="pagination_bottom">
+	<vb:if condition="$show['pagenav']">
+		{vb:raw pagenav}
+	</vb:if>
+		{vb:raw forumjump}
+	</div>
+</div>
+
+<vb:if condition="$show['multiquote_global']">
+<!-- multiquote scripts -->
+<script type="text/javascript">
+<!--
+var mqlimit = {vb:raw vboptions.mqlimit};
+//-->
+</script>
+<!-- / multiquote scripts -->
+</vb:if>
+
+<vb:if condition="$show['quickreply'] OR $show['ajax_js']">
+<!-- ajax errors table -->
+<div id="ajax_post_errors" class="hidden">
+	<div class="block">
+		<div class="blockhead">
+			<span class="blockhead_info"><input type="button" class="button" value=" X " id="quick_edit_errors_hide" tabindex="50" /></span>
+			<h2>{vb:rawphrase vbulletin_message}</h2>
+		</div>
+		<div class="blockbody">
+			<div id="ajax_post_errors_message" class="blockrow">&nbsp;</div>
+			<div class="blockfoot"><a href="#" id="quick_edit_errors_cancel" class="textcontrol">{vb:rawphrase cancel_changes}</a></div>
+		</div>
+	</div>
+</div>
+<!-- / ajax errors table -->
+
+<!-- scripts for quick reply and quick edit -->
+{vb:raw vBeditTemplate.clientscript}
+<vb:if condition="$show['quickedit']">
+	<script type="text/javascript">
+	<!--
+	vB_AJAX_QuickEdit_Init('posts');
+	//-->
+	</script>
+	<vb:if condition="!$show['quickreply']">
+		{vb:raw editor_clientscript}
+		{vb:raw editor_js}
+	</vb:if>
+</vb:if>
+<!-- / scripts for quick reply and quick edit -->
+</vb:if>
+
+<vb:if condition="$show['quickreply']">
+<div id="qr_defaultcontainer" class="floatcontainer qrcontainer<vb:if condition="$show['qr_require_click']"> qr_require_click</vb:if>">
+<form class="vbform" name="quick_reply" id="quick_reply" method="post" action="{vb:raw $vboptions.vbforum_url}{vb:if "$vboptions['vbforum_url']", '/', ''}newreply.php?do=postreply&amp;t={vb:raw threadid}"
+	onsubmit="return qr_prepare_submit(this, {vb:raw vboptions.postminchars});">
+	<div id="qr_error_tbody" class="block errorblock hidden">
+		<h3 class="blockhead">{vb:rawphrase errors}</h3>
+		<div class="blockbody formcontrols">
+			<h3 class="blocksubhead">{vb:rawphrase errors_occured_when_submitted}</h3>
+			<div class="blockrow error" id="qr_error_td"></div>
+		</div>
+		<div class="blockfoot actionbuttons"><div class="group"><a href="javascript://" class="textcontrol" onclick="return qr_hide_errors()">{vb:rawphrase okay}</a></div></div>
+	</div>
+	<h3 id="quickreply_title" class="blockhead">{vb:rawphrase quick_reply}<a name="quickreply"></a>	<img id="progress_newreplylink_bottom" class="hidden" src="images/electron_style/loader.gif" style="display:none;" alt="" /></h3>
+	<div class="wysiwyg_block">
+	<div class="blockbody formcontrols">
+		<div class="blockrow">
+			{vb:raw messagearea}
+		</div>
+		<vb:if condition="$show['signaturecheckbox']">
+		<div class="showsignature">
+			<ul class="checkradio">
+				<li><label for="cb_signature">
+					<input type="checkbox" name="signature" id="cb_signature" value="1" checked="checked" tabindex="1" />
+					{vb:rawphrase show_your_signature}
+				</label></li>
+			</ul>
+		</div>
+		</vb:if>
+		<vb:if condition="$show['openclose']">
+		<div class="openclose">
+			<ul class="checkradio">
+				<li><label for="cb_openclose">
+					<input type="checkbox" name="openclose" id="cb_openclose" value="1" tabindex="1" />
+					<vb:if condition="$show['closethread']">{vb:rawphrase close_this_thread}<vb:else />{vb:rawphrase reopen_this_thread}</vb:if>
+				</label></li>
+			</ul>
+		</div>
+		</vb:if>
+	</div>
+
+	<div class="blockfoot actionbuttons">
+		<div class="group">
+			<span id="qr_posting_msg" class="hidden">
+				<img src="images/electron_style/loader.gif" alt="{vb:rawphrase posting_quick_reply_please_wait}" />&nbsp;<strong>{vb:rawphrase posting_quick_reply_please_wait}</strong>
+			</span>
+			<vb:if condition="$show['fb_publishcheckbox']">
+				{vb:raw fbpublishcheckbox}
+			</vb:if>
+			<input type="submit" class="button" value="{vb:rawphrase post_quick_reply}" accesskey="s" title="(Alt + S)" name="sbutton" tabindex="1" id="qr_submit" onclick="clickedelm = this.value" />
+			<input type="submit" class="button" value="{vb:rawphrase go_advanced}" accesskey="x" title="(Alt + X)" name="preview" tabindex="1" id="qr_preview" onclick="clickedelm = this.value" />
+			<input type="reset" id="qr_cancelbutton" class="button" style="display:none;" value="{vb:rawphrase cancel}" accesskey="c" title="(Alt + C)" name="cancel" tabindex="4" onclick="qr_reset();" />
+		</div>
+	</div>
+
+	</div>
+	<input type="hidden" name="fromquickreply" value="1" />
+	<input type="hidden" name="s" value="{vb:raw session.sessionhash}" />
+	<input type="hidden" name="securitytoken" value="{vb:raw bbuserinfo.securitytoken}" />
+	<input type="hidden" name="do" value="postreply" />
+	<input type="hidden" name="t" value="{vb:raw threadid}" id="qr_threadid" />
+	<input type="hidden" name="p" value="{vb:raw qrpostid}" id="qr_postid" />
+	<input type="hidden" name="specifiedpost" value="0" id="qr_specifiedpost" />
+	<input type="hidden" name="parseurl" value="1" />
+	<input type="hidden" name="loggedinuser" value="{vb:raw bbuserinfo.userid}" />
+	<input type="hidden" name="posthash" value="" />
+	<input type="hidden" name="poststarttime" value="" />
+
+<vb:if condition="!is_browser('ie') AND $show['wysiwyg']">
+	<!-- Mozilla work around for focusing on QR in WYSIWYG mode -->
+	<div id="qr_scroll"></div>
+</vb:if>
+
+</form>
+</div>
+</vb:if>
+
+<vb:if condition="$show['next_prev_links']">
+	<!-- next / previous links -->
+	<div class="navlinks">
+		<vb:if condition="$vboptions['nextprevlinks']">
+			<vb:if condition="$prevthreadinfo">
+				<strong>&laquo;</strong>
+				<a href="{vb:link thread, {vb:raw prevthreadinfo}}">{vb:raw prevthreadinfo.title}</a>
+			</vb:if>
+			<vb:if condition="$prevthreadinfo && $nextthreadinfo"> | </vb:if>
+			<vb:if condition="$nextthreadinfo">
+				<a href="{vb:link thread, {vb:raw nextthreadinfo}}">{vb:raw nextthreadinfo.title}</a>
+				<strong>&raquo;</strong>
+			</vb:if>
+		<vb:else />
+			<strong>&laquo;</strong>
+			<a href="{vb:link thread, {vb:raw thread}, "goto=nextoldest"}" rel="nofollow">{vb:rawphrase prev_thread}</a> |
+			<a href="{vb:link thread, {vb:raw thread}, "goto=nextnewest"}" rel="nofollow">{vb:rawphrase next_thread}</a>
+			<strong>&raquo;</strong>
+		</vb:if>
+	</div>
+	<!-- / next / previous links -->
+</vb:if>
+<div id="thread_info" class="thread_info">
+	<vb:if condition="$show['activeusers']">
+	<h4 class="threadinfohead blockhead">{vb:rawphrase thread_information}</h4>
+	<div id="thread_onlineusers" class="thread_info_block blockbody">
+		<h5>{vb:rawphrase users_browsing_this_thread}</h5>
+		<p>{vb:rawphrase users_currently_browsing_x_y_z, {vb:raw totalonline}, {vb:raw numberregistered}, {vb:raw numberguest}}</p>
+		<ol style="background-color: rgb(255, 252, 241);  border: solid 1px;  border-radius: 4px;  border-color: rgb(231, 231, 231);  padding: 5px;  margin-top: 10px;" class="commalist">
+			<vb:each from="activeusers" value="row">
+				<li><a class="username" href="{vb:link member, {vb:raw row}}">{vb:raw row.musername}</a>{vb:raw row.invisiblemark}{vb:raw row.buddymark}{vb:raw row.comma}</li>
+			</vb:each>
+		</ol>
+	</div>
+	</vb:if>
+	{vb:raw similarthreads}
+	{vb:raw template_hook.showthread_after_activeusers}
+
+	<vb:if condition="$show['wrt']">
+	<h4 class="collapse threadinfohead blockhead">{vb:raw wrt.trtitle}
+		<a name="wrt" class="collapse" id="collapse_wrt_list" href="{vb:raw relpath}#top" title="{vb:rawphrase collapse_expand}"><img src="images/electron_style/blockhead{vb:raw wrt.collapse}.png" alt="" /></a>
+	</h4>
+	<div id="wrt_list" class="thread_info_block blockbody formcontrols" {vb:raw wrt.style}>
+		{vb:raw template_hook.showthread_whoread_readers}
+		<vb:if condition="$vboptions['wrtreaders']">
+			<vb:if condition="$wrt['trtotal'] == 0">
+				{vb:phrase no_members_list} 
+			<vb:else />
+				<ul class="commalist" id="showthread_wrt_list">
+					<vb:if condition="$wrt['template_hook']">
+						{vb:raw wrt.template_hook}
+					<vb:else />
+						<vb:each from="wrtlist" value="row">
+							<li>{vb:stylevar dirmark}<a class="username" href="{vb:link member, {vb:raw row}}" title="{vb:raw row.wrdate}">{vb:raw row.musername}</a>{vb:raw row.markinv}{vb:raw row.comma}</li>
+						</vb:each>
+					</vb:if>
+				</ul>
+			</vb:if>
+		<vb:else />
+			{vb:phrase member_list_disabled} 
+		</vb:if>
+	</div>
+	</vb:if>
+	{vb:raw template_hook.showthread_after_whoread}
+
+		<vb:if condition="$show['tag_box']">
+		<div class="options_block tags td">
+			<h4 class="threadinfohead blockhead">{vb:rawphrase tags_for_this_thread}
+				<a class="collapse" id="collapse_thread_tags_list" href="{vb:raw relpath}#top" title="{vb:rawphrase collapse_expand}"><img src="images/electron_style/blockhead.png" alt="" /></a>
+			</h4>
+			<div id="thread_tags_list" class="thread_info_block blockbody">
+					<div id='tag_list_cell'>
+						{vb:raw tag_list}
+					</div>
+					<p>
+						<a href="tags.php{vb:raw session.sessionurl_q}">{vb:rawphrase view_tag_cloud}</a>
+						<vb:if condition="$show['manage_tag']"><a id="tag_edit_link" href="threadtag.php?{vb:raw session.sessionurl}t={vb:raw thread.threadid}" class="textcontrol">{vb:rawphrase edit_tags}</a></vb:if>
+					</p>
+			</div>
+		</div>
+		</vb:if>	
+	
+        <!-- ///////////////////////// Photik -OptionBlock //////////////////////// -->
+	<!--<div class="options_block_container table">
+		<vb:if condition="$bookmarksites">
+		<div class="options_block td">
+			<h4 class="blockhead">{vb:rawphrase bookmarks}
+				<a class="collapse" id="collapse_social_bookmarks_list" href="{vb:raw relpath}#top" title="{vb:rawphrase collapse_expand}"><img src="images/electron_style/blockhead.png" alt="" /></a>
+			</h4>
+			<div id="social_bookmarks_list" class="thread_info_block blockbody">
+				
+				<ul class="icon_list">{vb:raw bookmarksites}</ul>
+			</div>
+		</div>
+		</vb:if>
+
+		<div class="options_block td">
+			<h4 class="collapse blockhead">{vb:rawphrase posting_rules}
+				<a class="collapse" id="collapse_posting_rules" href="{vb:raw relpath}#top" title="{vb:rawphrase collapse_expand}"><img src="images/electron_style/blockhead.png" alt="" /></a>
+			</h4>
+			<div id="posting_rules" class="thread_info_block blockbody">
+				{vb:raw forumrules}
+			</div>
+		</div>
+
+		<vb:if condition="$show['tag_box']">
+		<div class="options_block tags td">
+			<h4 class="threadinfohead blockhead">{vb:rawphrase tags_for_this_thread}
+				<a class="collapse" id="collapse_thread_tags_list" href="{vb:raw relpath}#top" title="{vb:rawphrase collapse_expand}"><img src="images/electron_style/blockhead.png" alt="" /></a>
+			</h4>
+			<div id="thread_tags_list" class="thread_info_block blockbody">
+					<div id='tag_list_cell'>
+						{vb:raw tag_list}
+					</div>
+					<p>
+						<a href="tags.php{vb:raw session.sessionurl_q}">{vb:rawphrase view_tag_cloud}</a>
+						<vb:if condition="$show['manage_tag']"><a id="tag_edit_link" href="threadtag.php?{vb:raw session.sessionurl}t={vb:raw thread.threadid}" class="textcontrol">{vb:rawphrase edit_tags}</a></vb:if>
+					</p>
+			</div>
+		</div>
+		</vb:if>
+	</div>
+</div>-->
+        <!-- ///////////////////////// Photik -OptionBlock //////////////////////// -->
+<vb:if condition="$show['inlinemod']">
+	<script type="text/javascript">
+	<!--
+		vB_XHTML_Ready.subscribe(
+			function() { register_inlinemod("inlinemodform", "li", "postbitim", "post"); }
+		);
+	//-->
+	</script>
+</vb:if>
+
+<vb:if condition="$show['lightbox']">
+<!-- lightbox scripts -->
+	<script type="text/javascript">
+	<!--
+	vBulletin.register_control("vB_Lightbox_Container", "posts", {vb:raw vboptions.lightboxenabled});
+	//-->
+	</script>
+<!-- / lightbox scripts -->
+</vb:if>
+{vb:raw template_hook.showthread_below_posts}
+
+{vb:raw footer}
+</body>
+</html>

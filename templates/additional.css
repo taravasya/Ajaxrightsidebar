@@ -47,7 +47,7 @@ h3#quickreply_title {
 div#rightside_container {
     display: none;
     overflow: auto;
-    width: 105%;
+    width: 110%;
     margin-top: -14px;
     padding-bottom: 10px;
 }
