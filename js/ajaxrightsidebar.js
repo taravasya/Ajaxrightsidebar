@@ -106,8 +106,8 @@ function writeContent() {
 }
 
 function toggleRightside() {
-    cookieRightSideBar =  (cookieRightSideBar == 'collapsed') ? 'expanded' : 'collapsed';
-    createCookie("rightside_container", cookieRightSideBar, 180);
+    cookieRightSideBar =  (!cookieRightSideBar || cookieRightSideBar == 'collapsed') ? 'expanded' : 'collapsed';
+	createCookie("rightside_container", cookieRightSideBar, 180);
 	ajaxupdate();
 	$postscontainer.style.width = (!$postscontainer.style.width || $postscontainer.style.width == '99%') ? '80%' : '99%';
 	$container.style.display = (!$container.style.display || $container.style.display == 'none') ? 'block' : 'none';
