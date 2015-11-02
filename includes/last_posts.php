@@ -2,7 +2,7 @@
 if ($_REQUEST['getlastposts'] == 1)
 {
 	chdir('../../');
-	require_once('/global.php');
+	require_once('./global.php');
 	$ajaxupdate = true;
 }
 

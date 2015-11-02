@@ -1,7 +1,5 @@
 <?php
-if ($vbulletin->options['last_visited_threads']) {
-
-	for ($i=1; $i<=5; $i++)
+for ($i=1; $i<=5; $i++)
 	{
 		$name = 'lvp'.$i;
 
@@ -36,6 +34,5 @@ if ($vbulletin->options['last_visited_threads']) {
 
 		}
 
-	}
-} 
+	} 
 ?>
